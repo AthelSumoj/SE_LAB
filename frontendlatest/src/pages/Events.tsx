@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -14,53 +15,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
 
 const Events = () => {
   const [filter, setFilter] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredEvents, setFilteredEvents] = useState(events);
-  const [newEvent, setNewEvent] = useState({
-    title: "",
-    date: "",
-    time: "",
-    endTime: "", // Added endTime field
-    location: "",
-    description: "",
-    type: "reunion",
-  });
-
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  useEffect(() => {
-    // Filter events based on the selected filter and search query
-    setFilteredEvents(
-      events.filter(
-        (event) =>
-          (filter === "all" || event.type === filter) &&
-          event.title.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    );
-  }, [filter, searchQuery]);
-
-  const handleCreateEvent = () => {
-    if (newEvent.title && newEvent.date && newEvent.time && newEvent.endTime && newEvent.description) {
-      events.push({ ...newEvent, attendeeCount: 0, isUpcoming: true });
-      setFilteredEvents([...events]);
-      setNewEvent({
-        title: "",
-        date: "",
-        time: "",
-        endTime: "", // Reset endTime field
-        location: "",
-        description: "",
-        type: "reunion",
-      });
-    }
-  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -95,33 +56,59 @@ const Events = () => {
           <div className="mb-10 bg-secondary rounded-lg p-6">
             <div className="flex flex-col md:flex-row justify-between mb-6">
               <h2 className="text-2xl font-bold mb-4 md:mb-0">Find Events</h2>
+              <div className="flex gap-4">
+                <Tabs defaultValue="list" className="w-full md:w-auto">
+                  <TabsList>
+                    <TabsTrigger value="list">List View</TabsTrigger>
+                    <TabsTrigger value="calendar">Calendar</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
-                <Input
-                  placeholder="Search events..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
+                <Input placeholder="Search events..." />
               </div>
               <div>
-                <Select onValueChange={(value) => setFilter(value)} value={filter}>
+                <Select>
                   <SelectTrigger>
                     <SelectValue placeholder="Event Type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Events</SelectItem>
+                    <SelectItem value="all">All Types</SelectItem>
                     <SelectItem value="reunion">Reunion</SelectItem>
-                    <SelectItem value="college">College Event</SelectItem>
+                    <SelectItem value="workshop">Workshop</SelectItem>
+                    <SelectItem value="networking">Networking</SelectItem>
+                    <SelectItem value="ceremony">Ceremony</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+              <div>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Location" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Locations</SelectItem>
+                    <SelectItem value="campus">On Campus</SelectItem>
+                    <SelectItem value="online">Online</SelectItem>
+                    <SelectItem value="city">In City</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Button className="w-full gap-2">
+                  <ListFilter className="h-4 w-4" />
+                  Apply Filters
+                </Button>
               </div>
             </div>
           </div>
           
           {/* Event Categories */}
           <div className="mb-10">
-            <div className="flex gap-4">
+            <div className="flex overflow-x-auto pb-2 gap-2">
               <Button 
                 variant={filter === "all" ? "default" : "outline"} 
                 onClick={() => setFilter("all")}
@@ -130,18 +117,32 @@ const Events = () => {
                 All Events
               </Button>
               <Button 
-                variant={filter === "reunion" ? "default" : "outline"} 
-                onClick={() => setFilter("reunion")}
-                className="rounded-full"
+                variant={filter === "upcoming" ? "default" : "outline"} 
+                onClick={() => setFilter("upcoming")}
+                className="rounded-full whitespace-nowrap"
               >
-                Reunions
+                Upcoming
+              </Button>
+              <Button 
+                variant={filter === "batch" ? "default" : "outline"} 
+                onClick={() => setFilter("batch")}
+                className="rounded-full whitespace-nowrap"
+              >
+                Batch Reunions
               </Button>
               <Button 
                 variant={filter === "college" ? "default" : "outline"} 
                 onClick={() => setFilter("college")}
-                className="rounded-full"
+                className="rounded-full whitespace-nowrap"
               >
                 College Events
+              </Button>
+              <Button 
+                variant={filter === "meetups" ? "default" : "outline"} 
+                onClick={() => setFilter("meetups")}
+                className="rounded-full"
+              >
+                Meetups
               </Button>
             </div>
           </div>
@@ -151,12 +152,12 @@ const Events = () => {
             <Tabs defaultValue="list">
               <TabsContent value="list" className="mt-0">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {filteredEvents.map((event, index) => (
+                  {events.map((event, index) => (
                     <EventCard
                       key={index}
                       title={event.title}
                       date={event.date}
-                      time={`${event.time} - ${event.endTime}`} // Updated to display start and end time
+                      time={event.time}
                       location={event.location}
                       description={event.description}
                       attendeeCount={event.attendeeCount}
@@ -228,69 +229,9 @@ const Events = () => {
                   Create your own event and invite fellow alumni to join. It's a great way to reconnect with old friends and grow your network.
                 </p>
               </div>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button size="lg" className="md:min-w-[180px]">
-                    Create Event
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Create Event</DialogTitle>
-                    <DialogDescription>
-                      Fill in the details below to create a new event.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <Input 
-                      placeholder="Event Title" 
-                      value={newEvent.title} 
-                      onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })} 
-                    />
-                    <Input 
-                      placeholder="Date" 
-                      type="date" 
-                      value={newEvent.date} 
-                      onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })} 
-                    />
-                    <Input 
-                      placeholder="Start Time" 
-                      type="time" 
-                      value={newEvent.time} 
-                      onChange={(e) => setNewEvent({ ...newEvent, time: e.target.value })} 
-                    />
-                    <Input 
-                      placeholder="End Time" 
-                      type="time" 
-                      value={newEvent.endTime} 
-                      onChange={(e) => setNewEvent({ ...newEvent, endTime: e.target.value })} 
-                    />
-                    <Input 
-                      placeholder="Location" 
-                      value={newEvent.location} 
-                      onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })} 
-                    />
-                    <Textarea 
-                      placeholder="Description" 
-                      value={newEvent.description} 
-                      onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })} 
-                    />
-                    <Select 
-                      onValueChange={(value) => setNewEvent({ ...newEvent, type: value })} 
-                      value={newEvent.type}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Event Type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="reunion">Reunion</SelectItem>
-                        <SelectItem value="college">College Event</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <Button onClick={handleCreateEvent}>Create</Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
+              <Button size="lg" className="md:min-w-[180px]">
+                Create Event
+              </Button>
             </div>
           </div>
         </div>
@@ -307,8 +248,7 @@ const events = [
   {
     title: "Tech Industry Workshop",
     date: "June 3, 2024",
-    time: "2:00 PM",
-    endTime: "5:00 PM", // Added endTime field
+    time: "2:00 PM - 5:00 PM",
     location: "Virtual (Zoom)",
     description: "Join industry experts for a workshop on the latest tech trends and career opportunities.",
     attendeeCount: 85,
@@ -316,9 +256,8 @@ const events = [
   },
   {
     title: "Class of 2010 Batch Reunion",
-    date: "June 22, 4",
-    time: "6:00 PM",
-    endTime: "10:00 PM", // Added endTime field
+    date: "June 22, 2024",
+    time: "6:00 PM - 10:00 PM",
     location: "Campus Auditorium",
     description: "Celebrate 14 years since graduation with your batchmates. Dinner and entertainment provided.",
     attendeeCount: 42,
@@ -327,8 +266,7 @@ const events = [
   {
     title: "Networking Mixer in Bangalore",
     date: "July 5, 2024",
-    time: "7:30 PM",
-    endTime: "10:00 PM", // Added endTime field
+    time: "7:30 PM - 10:00 PM",
     location: "The Leela Palace, Bangalore",
     description: "Connect with alumni in the Bangalore region for an evening of networking and refreshments.",
     attendeeCount: 30,
@@ -337,8 +275,7 @@ const events = [
   {
     title: "College Foundation Day",
     date: "August 12, 2024",
-    time: "10:00 AM",
-    endTime: "4:00 PM", // Added endTime field
+    time: "10:00 AM - 4:00 PM",
     location: "College Campus",
     description: "Join the celebration of our college's foundation day with special events and alumni recognition.",
     attendeeCount: 120,

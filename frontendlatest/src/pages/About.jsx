@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -8,7 +9,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Mail, MapPin, Phone, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-// import emailjs from "emailjs-com"; // Install EmailJS: npm install emailjs-com
 
 export default function About() {
   useEffect(() => {
@@ -28,46 +28,18 @@ export default function About() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    try {
-      // EmailJS configuration
-      const serviceID = "your_service_id";
-      const templateID = "your_template_id";
-      const userID = "your_user_id";
-
-      await emailjs.send(
-        serviceID,
-        templateID,
-        {
-          to_email: "furioma333@gmail.com",
-          from_name: formData.name,
-          from_email: formData.email,
-          subject: formData.subject,
-          message: formData.message,
-        },
-        userID
-      );
-
-      toast({
-        title: "Message Sent",
-        description: "Thank you for reaching out. We'll get back to you soon!",
-      });
-
-      setFormData({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to send the message. Please try again later.",
-        variant: "destructive",
-      });
-    }
+    toast({
+      title: "Message Sent",
+      description: "Thank you for reaching out. We'll get back to you soon!",
+    });
+    setFormData({
+      name: "",
+      email: "",
+      subject: "",
+      message: ""
+    });
   };
 
   return (

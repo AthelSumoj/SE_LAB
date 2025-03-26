@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useEffect } from "react";
 import Navbar from "../components/Navbar";
@@ -14,123 +15,24 @@ import {
 import JobFilters from "@/components/jobs/JobFilters";
 
 const Jobs = () => {
-  const [jobListings, setJobListings] = useState([
-    {
-      id: 1,
-      title: "Software Engineer",
-      company: "Tech Solutions Inc.",
-      type: "Full-time",
-      location: "Bangalore",
-      salary: "₹18-24 LPA",
-      industry: "Technology",
-      description: "Looking for experienced software engineers to join our growing team. Knowledge of React, Node.js, and cloud technologies required."
-    },
-    {
-      id: 2,
-      title: "Data Scientist",
-      company: "Analytics Pro",
-      type: "Full-time",
-      location: "Mumbai",
-      salary: "₹20-25 LPA",
-      industry: "Technology",
-      description: "Join our data science team to work on challenging problems. Experience with Python, R, and machine learning frameworks needed."
-    },
-    {
-      id: 3,
-      title: "Product Manager",
-      company: "InnovateX",
-      type: "Full-time",
-      location: "Hybrid (Hyderabad)",
-      salary: "₹25-35 LPA",
-      industry: "Technology",
-      description: "Leading product initiatives from conception to launch. Strong background in tech and business required."
-    },
-    {
-      id: 4,
-      title: "DevOps Engineer",
-      company: "CloudWorks",
-      type: "Contract",
-      location: "Remote",
-      salary: "₹15-22 LPA",
-      industry: "Technology",
-      description: "Implement and manage CI/CD pipelines, container orchestration, and cloud infrastructure. AWS/Azure certification preferred."
-    },
-    {
-      id: 5,
-      title: "Summer Internship - Software Development",
-      company: "TechStart Labs",
-      type: "Internship",
-      location: "Bangalore",
-      salary: "₹30-40K/month",
-      industry: "Technology",
-      description: "3-month summer internship opportunity for pre-final year students. Learn and work with the latest web technologies in a fast-paced environment."
-    },
-    {
-      id: 6,
-      title: "Research Intern",
-      company: "InnoLabs Research",
-      type: "Internship",
-      location: "Remote",
-      salary: "₹25K/month",
-      industry: "Technology",
-      description: "6-month research internship in AI/ML. Work on cutting-edge research projects under experienced mentors."
-    }
-  ]);
-
   const [filteredJobs, setFilteredJobs] = useState(jobListings);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [newJob, setNewJob] = useState({
-    title: "",
-    company: "",
-    type: "full-time",
-    location: "bangalore",
-    salary: "",
-    industry: "technology",
-    description: "",
-  });
-  const [visibleJobs, setVisibleJobs] = useState(4); // Number of jobs to show initially
 
   useEffect(() => {
     document.title = "Jobs | Alumni Affairs Network-NITC";
   }, []);
 
-  const handleFilterChange = (filters) => {
-    const filtered = jobListings.filter((job) => {
-      const matchesType = filters.type === "all" || job.type.toLowerCase() === filters.type;
-      const matchesLocation = filters.location === "all" || job.location.toLowerCase().includes(filters.location);
-      const matchesIndustry = filters.industry === "all" || job.industry.toLowerCase() === filters.industry;
-      return matchesType && matchesLocation && matchesIndustry;
-    });
-    setFilteredJobs(filtered);
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewJob((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleAddJob = (e) => {
-    e.preventDefault(); // Prevent form submission from reloading the page
-    if (newJob.title && newJob.company && newJob.description) {
-      const updatedJob = { id: jobListings.length + 1, ...newJob };
-      const updatedJobListings = [...jobListings, updatedJob];
-      setJobListings(updatedJobListings); // Update the jobListings state
-      setFilteredJobs(updatedJobListings); // Update the filtered jobs list
-      setNewJob({
-        title: "",
-        company: "",
-        type: "full-time",
-        location: "bangalore",
-        salary: "",
-        industry: "technology",
-        description: "",
+  const handleFilterChange = (type, value) => {
+    if (value === 'all') {
+      setFilteredJobs(jobListings);
+    } else {
+      const filtered = jobListings.filter(job => {
+        if (type === 'type') return job.type.toLowerCase() === value;
+        if (type === 'location') return job.location.toLowerCase().includes(value);
+        if (type === 'industry') return job.industry.toLowerCase() === value;
+        return true;
       });
-      setIsPopupOpen(false);
+      setFilteredJobs(filtered);
     }
-  };
-
-  const handleLoadMore = () => {
-    setVisibleJobs((prev) => prev + 4); // Load 4 more jobs each time
   };
 
   return (
@@ -145,141 +47,21 @@ const Jobs = () => {
           <JobFilters onFilterChange={handleFilterChange} />
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-            {filteredJobs.slice(0, visibleJobs).map((job) => (
+            {filteredJobs.map((job) => (
               <JobCard key={job.id} job={job} />
             ))}
           </div>
-
-          {visibleJobs < filteredJobs.length && (
-            <div className="text-center">
-              <Button onClick={handleLoadMore}>Load More Jobs</Button>
-            </div>
-          )}
 
           <div className="bg-muted rounded-lg p-6 mt-8">
             <h2 className="text-2xl font-semibold mb-4">Post a Job Opening</h2>
             <p className="mb-4">
               Are you looking to hire talented NITC alumni or offer internships? Share your opportunities with our network.
             </p>
-            <Button onClick={() => setIsPopupOpen(true)}>Submit a Job Listing</Button>
+            <Button>Submit a Job Listing</Button>
           </div>
         </div>
       </main>
       <Footer />
-
-      {isPopupOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[70vh] overflow-y-auto flex flex-row gap-6">
-            <div className="w-1/2">
-              <h3 className="text-xl font-semibold mb-4 text-center">Add Job Details</h3>
-              <form onSubmit={(e) => {
-                e.preventDefault(); // Prevent default form submission behavior
-                handleAddJob(e); // Call the add job handler
-              }} className="space-y-4">
-                <div>
-                  <label htmlFor="title" className="block text-sm font-medium mb-1">Job Title</label>
-                  <input
-                    id="title"
-                    name="title"
-                    type="text"
-                    value={newJob.title}
-                    onChange={handleInputChange}
-                    className="w-full border rounded px-3 py-2"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="company" className="block text-sm font-medium mb-1">Company</label>
-                  <input
-                    id="company"
-                    name="company"
-                    type="text"
-                    value={newJob.company}
-                    onChange={handleInputChange}
-                    className="w-full border rounded px-3 py-2"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="jobType" className="block text-sm font-medium mb-1">Job Type</label>
-                  <select
-                    id="jobType"
-                    name="type"
-                    value={newJob.type}
-                    onChange={handleInputChange}
-                    className="w-full border rounded px-3 py-2"
-                  >
-                    <option value="full-time">Full-time</option>
-                    <option value="part-time">Part-time</option>
-                    <option value="contract">Contract</option>
-                    <option value="internship">Internship</option>
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="industry" className="block text-sm font-medium mb-1">Industry</label>
-                  <select
-                    id="industry"
-                    name="industry"
-                    value={newJob.industry}
-                    onChange={handleInputChange}
-                    className="w-full border rounded px-3 py-2"
-                  >
-                    <option value="technology">Technology</option>
-                    <option value="finance">Finance</option>
-                    <option value="healthcare">Healthcare</option>
-                    <option value="education">Education</option>
-                  </select>
-                </div>
-              </form>
-            </div>
-            <div className="w-1/2">
-              <form className="space-y-4">
-                <div>
-                  <label htmlFor="location" className="block text-sm font-medium mb-1">Location</label>
-                  <select
-                    id="location"
-                    name="location"
-                    value={newJob.location}
-                    onChange={handleInputChange}
-                    className="w-full border rounded px-3 py-2"
-                  >
-                    <option value="bangalore">Bangalore</option>
-                    <option value="mumbai">Mumbai</option>
-                    <option value="hyderabad">Hyderabad</option>
-                    <option value="remote">Remote</option>
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="salary" className="block text-sm font-medium mb-1">Salary</label>
-                  <input
-                    id="salary"
-                    name="salary"
-                    type="text"
-                    value={newJob.salary}
-                    onChange={handleInputChange}
-                    className="w-full border rounded px-3 py-2"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="description" className="block text-sm font-medium mb-1">Description</label>
-                  <textarea
-                    id="description"
-                    name="description"
-                    value={newJob.description}
-                    onChange={handleInputChange}
-                    className="w-full border rounded px-3 py-2"
-                    rows="4"
-                  />
-                </div>
-                <div className="flex justify-end gap-2">
-                  <Button type="button" variant="secondary" onClick={() => setIsPopupOpen(false)}>Cancel</Button>
-                  <Button type="submit">Add Job</Button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
@@ -358,5 +140,69 @@ const JobCard = ({ job }) => {
     </Card>
   );
 };
+
+// Sample job data
+const jobListings = [
+  {
+    id: 1,
+    title: "Software Engineer",
+    company: "Tech Solutions Inc.",
+    type: "Full-time",
+    location: "Bangalore",
+    salary: "₹18-24 LPA",
+    industry: "Technology",
+    description: "Looking for experienced software engineers to join our growing team. Knowledge of React, Node.js, and cloud technologies required."
+  },
+  {
+    id: 2,
+    title: "Data Scientist",
+    company: "Analytics Pro",
+    type: "Full-time",
+    location: "Mumbai",
+    salary: "₹20-25 LPA",
+    industry: "Technology",
+    description: "Join our data science team to work on challenging problems. Experience with Python, R, and machine learning frameworks needed."
+  },
+  {
+    id: 3,
+    title: "Product Manager",
+    company: "InnovateX",
+    type: "Full-time",
+    location: "Hybrid (Hyderabad)",
+    salary: "₹25-35 LPA",
+    industry: "Technology",
+    description: "Leading product initiatives from conception to launch. Strong background in tech and business required."
+  },
+  {
+    id: 4,
+    title: "DevOps Engineer",
+    company: "CloudWorks",
+    type: "Contract",
+    location: "Remote",
+    salary: "₹15-22 LPA",
+    industry: "Technology",
+    description: "Implement and manage CI/CD pipelines, container orchestration, and cloud infrastructure. AWS/Azure certification preferred."
+  },
+  {
+    id: 5,
+    title: "Summer Internship - Software Development",
+    company: "TechStart Labs",
+    type: "Internship",
+    location: "Bangalore",
+    salary: "₹30-40K/month",
+    industry: "Technology",
+    description: "3-month summer internship opportunity for pre-final year students. Learn and work with the latest web technologies in a fast-paced environment."
+  },
+  {
+    id: 6,
+    title: "Research Intern",
+    company: "InnoLabs Research",
+    type: "Internship",
+    location: "Remote",
+    salary: "₹25K/month",
+    industry: "Technology",
+    description: "6-month research internship in AI/ML. Work on cutting-edge research projects under experienced mentors."
+  }
+];
 
 export default Jobs;

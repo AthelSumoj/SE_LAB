@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from "@/components/ui/dialog";
@@ -18,8 +19,7 @@ const AlumniCard = ({ alumni }) => {
       </div>
       <CardContent className="pt-4 text-center">
         <h3 className="font-semibold text-xl">{alumni.name}</h3>
-        <p className="text-muted-foreground text-sm">{alumni.programme} - {alumni.department}</p>
-        <p className="text-muted-foreground text-sm">Batch of {alumni.batchYear}</p>
+        <p className="text-muted-foreground text-sm">{alumni.batch} • {alumni.department}</p>
         <p className="font-medium mt-2">{alumni.company}</p>
         <p className="text-sm text-muted-foreground">{alumni.designation}</p>
         <p className="text-sm mt-1">{alumni.location}</p>

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react"; // Added useRef
+import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Leaderboard from "@/components/profile/Leaderboard";
@@ -45,32 +45,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [profileInfo, setProfileInfo] = useState({
-    firstName: "Rahul",
-    lastName: "Kumar",
-    email: "rahul.kumar@example.com",
-    phone: "+91 98765 43210",
-    location: "Bangalore, India",
-    about: "Senior Software Engineer with 9 years of experience specializing in full-stack development and cloud architecture. Passionate about mentoring and building scalable applications.",
-    currentRole: "Senior Software Engineer",
-    company: "TechCorp Inc.",
-    industry: "Information Technology",
-    skills: "React, Node.js, AWS, Java, TypeScript, Project Management",
-    linkedin: "linkedin.com/in/rahulkumar",
-    twitter: "twitter.com/rahulk",
-    github: "github.com/rahulkumar",
-    website: "www.rahulkumar.dev",
-  });
-  const [resume, setResume] = useState(null);
-  const resumeInputRef = useRef(null); // Added ref for file input
-  const [jobs, setJobs] = useState([
-    { title: "Senior Software Engineer", company: "TechCorp Inc.", period: "2019 - Present", description: "Leading a team of 5 developers building cloud-native applications using React, Node.js, and AWS. Improved system performance by 40% through architecture redesign." },
-    { title: "Software Engineer", company: "InnovateX", period: "2015 - 2019", description: "Developed and maintained enterprise applications using Java and Angular. Implemented CI/CD pipelines that reduced deployment time by 60%." }
-  ]);
-
-  const [education, setEducation] = useState([
-    { title: "B.Tech in Computer Science", institution: "University College of Engineering", period: "2011 - 2015", description: "Graduated with honors. Active member of the coding club and technical symposium organizing committee." }
-  ]);
   
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -162,11 +136,13 @@ const Profile = () => {
                   <div className="md:col-span-1 space-y-8">
                     {/* About Card */}
                     <ProfileCard title="About">
-                      <p className="text-muted-foreground">{profileInfo.about}</p>
+                      <p className="text-muted-foreground">
+                        Senior Software Engineer with 8 years of experience specializing in full-stack development and cloud architecture. Passionate about mentoring and building scalable applications.
+                      </p>
                       
                       <div className="mt-6 space-y-3">
-                        <ProfileInfo icon={<Briefcase className="h-4 w-4" />} label={`${profileInfo.currentRole} at ${profileInfo.company}`} />
-                        <ProfileInfo icon={<MapPin className="h-4 w-4" />} label={profileInfo.location} />
+                        <ProfileInfo icon={<Briefcase className="h-4 w-4" />} label="Senior Software Engineer at TechCorp" />
+                        <ProfileInfo icon={<MapPin className="h-4 w-4" />} label="Bangalore, India" />
                         <ProfileInfo icon={<CalendarDays className="h-4 w-4" />} label="Joined June 2015" />
                       </div>
                     </ProfileCard>
@@ -174,18 +150,18 @@ const Profile = () => {
                     {/* Contact Info Card */}
                     <ProfileCard title="Contact Information">
                       <div className="space-y-3">
-                        <ProfileInfo icon={<Mail className="h-4 w-4" />} label={profileInfo.email} />
-                        <ProfileInfo icon={<Phone className="h-4 w-4" />} label={profileInfo.phone} />
-                        <ProfileInfo icon={<Globe className="h-4 w-4" />} label={profileInfo.website} />
+                        <ProfileInfo icon={<Mail className="h-4 w-4" />} label="rahul.kumar@example.com" />
+                        <ProfileInfo icon={<Phone className="h-4 w-4" />} label="+91 98765 43210" />
+                        <ProfileInfo icon={<Globe className="h-4 w-4" />} label="www.rahulkumar.dev" />
                       </div>
                     </ProfileCard>
                     
                     {/* Social Links Card */}
                     <ProfileCard title="Social Profiles">
                       <div className="space-y-3">
-                        <ProfileInfo icon={<Linkedin className="h-4 w-4" />} label={profileInfo.linkedin} />
-                        <ProfileInfo icon={<Twitter className="h-4 w-4" />} label={profileInfo.twitter} />
-                        <ProfileInfo icon={<Github className="h-4 w-4" />} label={profileInfo.github} />
+                        <ProfileInfo icon={<Linkedin className="h-4 w-4" />} label="linkedin.com/in/rahulkumar" />
+                        <ProfileInfo icon={<Twitter className="h-4 w-4" />} label="twitter.com/rahulk" />
+                        <ProfileInfo icon={<Github className="h-4 w-4" />} label="github.com/rahulkumar" />
                       </div>
                     </ProfileCard>
                     
@@ -215,30 +191,30 @@ const Profile = () => {
                     {/* Professional Experience */}
                     <ProfileCard title="Professional Experience">
                       <div className="space-y-6">
-                        {jobs.map((job, index) => (
-                          <ExperienceItem
-                            key={index}
-                            title={job.title}
-                            company={job.company}
-                            period={job.period}
-                            description={job.description}
-                          />
-                        ))}
+                        <ExperienceItem 
+                          title="Senior Software Engineer"
+                          company="TechCorp Inc."
+                          period="2019 - Present"
+                          description="Leading a team of 5 developers building cloud-native applications using React, Node.js, and AWS. Improved system performance by 40% through architecture redesign."
+                        />
+                        <ExperienceItem 
+                          title="Software Engineer"
+                          company="InnovateX"
+                          period="2015 - 2019"
+                          description="Developed and maintained enterprise applications using Java and Angular. Implemented CI/CD pipelines that reduced deployment time by 60%."
+                        />
                       </div>
                     </ProfileCard>
                     
                     {/* Education */}
                     <ProfileCard title="Education">
                       <div className="space-y-6">
-                        {education.map((edu, index) => (
-                          <ExperienceItem
-                            key={index}
-                            title={edu.title}
-                            company={edu.institution}
-                            period={edu.period}
-                            description={edu.description}
-                          />
-                        ))}
+                        <ExperienceItem 
+                          title="B.Tech in Computer Science"
+                          company="University College of Engineering"
+                          period="2011 - 2015"
+                          description="Graduated with honors. Active member of the coding club and technical symposium organizing committee."
+                        />
                       </div>
                     </ProfileCard>
                   </div>
@@ -257,271 +233,66 @@ const Profile = () => {
                       <div className="flex flex-col md:flex-row gap-6">
                         <div className="flex-1">
                           <Label htmlFor="firstName">First Name</Label>
-                          <Input
-                            id="firstName"
-                            value={profileInfo.firstName}
-                            onChange={(e) =>
-                              setProfileInfo((prev) => ({ ...prev, firstName: e.target.value }))
-                            }
-                          />
+                          <Input id="firstName" defaultValue="Rahul" />
                         </div>
                         <div className="flex-1">
                           <Label htmlFor="lastName">Last Name</Label>
-                          <Input
-                            id="lastName"
-                            value={profileInfo.lastName}
-                            onChange={(e) =>
-                              setProfileInfo((prev) => ({ ...prev, lastName: e.target.value }))
-                            }
-                          />
+                          <Input id="lastName" defaultValue="Kumar" />
                         </div>
                       </div>
                       
                       <div className="flex flex-col md:flex-row gap-6">
                         <div className="flex-1">
                           <Label htmlFor="email">Email Address</Label>
-                          <Input
-                            id="email"
-                            type="email"
-                            value={profileInfo.email}
-                            onChange={(e) =>
-                              setProfileInfo((prev) => ({ ...prev, email: e.target.value }))
-                            }
-                          />
+                          <Input id="email" type="email" defaultValue="rahul.kumar@example.com" />
                         </div>
                         <div className="flex-1">
                           <Label htmlFor="phone">Phone Number</Label>
-                          <Input
-                            id="phone"
-                            value={profileInfo.phone}
-                            onChange={(e) =>
-                              setProfileInfo((prev) => ({ ...prev, phone: e.target.value }))
-                            }
-                          />
+                          <Input id="phone" defaultValue="+91 98765 43210" />
                         </div>
                       </div>
                       
                       <div>
                         <Label htmlFor="location">Location</Label>
-                        <Input
-                          id="location"
-                          value={profileInfo.location}
-                          onChange={(e) =>
-                            setProfileInfo((prev) => ({ ...prev, location: e.target.value }))
-                          }
-                        />
+                        <Input id="location" defaultValue="Bangalore, India" />
                       </div>
                       
                       <div>
                         <Label htmlFor="about">About Me</Label>
-                        <Textarea
-                          id="about"
-                          rows={4}
-                          value={profileInfo.about}
-                          onChange={(e) =>
-                            setProfileInfo((prev) => ({ ...prev, about: e.target.value }))
-                          }
-                        />
+                        <Textarea id="about" rows={4} defaultValue="Senior Software Engineer with 8 years of experience specializing in full-stack development and cloud architecture. Passionate about mentoring and building scalable applications." />
                       </div>
-
-                      {/* Added fields for Current Role and Company */}
-                      <div className="flex flex-col md:flex-row gap-6">
-                        <div className="flex-1">
-                          <Label htmlFor="currentRole">Current Role</Label>
-                          <Input
-                            id="currentRole"
-                            value={profileInfo.currentRole}
-                            onChange={(e) =>
-                              setProfileInfo((prev) => ({ ...prev, currentRole: e.target.value }))
-                            }
-                          />
-                        </div>
-                        <div className="flex-1">
-                          <Label htmlFor="company">Company</Label>
-                          <Input
-                            id="company"
-                            value={profileInfo.company}
-                            onChange={(e) =>
-                              setProfileInfo((prev) => ({ ...prev, company: e.target.value }))
-                            }
-                          />
-                        </div>
-                      </div>
+                      
+                      <Button>Save Personal Information</Button>
                     </CardContent>
-                    <Button
-                      onClick={() =>
-                        setProfileInfo((prev) => ({
-                          ...prev,
-                          firstName: document.getElementById("firstName").value,
-                          lastName: document.getElementById("lastName").value,
-                          email: document.getElementById("email").value,
-                          phone: document.getElementById("phone").value,
-                          location: document.getElementById("location").value,
-                          about: document.getElementById("about").value,
-                          currentRole: document.getElementById("currentRole").value,
-                          company: document.getElementById("company").value,
-                        }))
-                      }
-                    >
-                      Save Personal Information
-                    </Button>
                   </Card>
                   
                   <Card className="lg:col-span-3">
                     <CardHeader>
-                      <CardTitle>Professional Experience</CardTitle>
-                      <CardDescription>Add, update, or delete your job experiences</CardDescription>
+                      <CardTitle>Professional Information</CardTitle>
+                      <CardDescription>Update your work and education details</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
-                      {jobs.map((job, index) => (
-                        <div key={index} className="space-y-4 border-b pb-4">
-                          <div>
-                            <Label htmlFor={`job-title-${index}`}>Job Title</Label>
-                            <Input
-                              id={`job-title-${index}`}
-                              value={job.title}
-                              onChange={(e) => {
-                                const updatedJobs = [...jobs];
-                                updatedJobs[index].title = e.target.value;
-                                setJobs(updatedJobs);
-                              }}
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor={`job-company-${index}`}>Company</Label>
-                            <Input
-                              id={`job-company-${index}`}
-                              value={job.company}
-                              onChange={(e) => {
-                                const updatedJobs = [...jobs];
-                                updatedJobs[index].company = e.target.value;
-                                setJobs(updatedJobs);
-                              }}
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor={`job-period-${index}`}>Period</Label>
-                            <Input
-                              id={`job-period-${index}`}
-                              value={job.period}
-                              onChange={(e) => {
-                                const updatedJobs = [...jobs];
-                                updatedJobs[index].period = e.target.value;
-                                setJobs(updatedJobs);
-                              }}
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor={`job-description-${index}`}>Description</Label>
-                            <Textarea
-                              id={`job-description-${index}`}
-                              value={job.description}
-                              onChange={(e) => {
-                                const updatedJobs = [...jobs];
-                                updatedJobs[index].description = e.target.value;
-                                setJobs(updatedJobs);
-                              }}
-                            />
-                          </div>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() => {
-                              const updatedJobs = jobs.filter((_, i) => i !== index);
-                              setJobs(updatedJobs);
-                            }}
-                          >
-                            Delete Job
-                          </Button>
-                        </div>
-                      ))}
-                      <Button
-                        variant="outline"
-                        onClick={() =>
-                          setJobs([...jobs, { title: "", company: "", period: "", description: "" }])
-                        }
-                      >
-                        Add Job
-                      </Button>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="lg:col-span-3">
-                    <CardHeader>
-                      <CardTitle>Education</CardTitle>
-                      <CardDescription>Add, update, or delete your education details</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                      {education.map((edu, index) => (
-                        <div key={index} className="space-y-4 border-b pb-4">
-                          <div>
-                            <Label htmlFor={`edu-title-${index}`}>Degree/Program</Label>
-                            <Input
-                              id={`edu-title-${index}`}
-                              value={edu.title}
-                              onChange={(e) => {
-                                const updatedEducation = [...education];
-                                updatedEducation[index].title = e.target.value;
-                                setEducation(updatedEducation);
-                              }}
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor={`edu-institution-${index}`}>Institution</Label>
-                            <Input
-                              id={`edu-institution-${index}`}
-                              value={edu.institution}
-                              onChange={(e) => {
-                                const updatedEducation = [...education];
-                                updatedEducation[index].institution = e.target.value;
-                                setEducation(updatedEducation);
-                              }}
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor={`edu-period-${index}`}>Period</Label>
-                            <Input
-                              id={`edu-period-${index}`}
-                              value={edu.period}
-                              onChange={(e) => {
-                                const updatedEducation = [...education];
-                                updatedEducation[index].period = e.target.value;
-                                setEducation(updatedEducation);
-                              }}
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor={`edu-description-${index}`}>Description</Label>
-                            <Textarea
-                              id={`edu-description-${index}`}
-                              value={edu.description}
-                              onChange={(e) => {
-                                const updatedEducation = [...education];
-                                updatedEducation[index].description = e.target.value;
-                                setEducation(updatedEducation);
-                              }}
-                            />
-                          </div>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() => {
-                              const updatedEducation = education.filter((_, i) => i !== index);
-                              setEducation(updatedEducation);
-                            }}
-                          >
-                            Delete Education
-                          </Button>
-                        </div>
-                      ))}
-                      <Button
-                        variant="outline"
-                        onClick={() =>
-                          setEducation([...education, { title: "", institution: "", period: "", description: "" }])
-                        }
-                      >
-                        Add Education
-                      </Button>
+                      <div>
+                        <Label htmlFor="currentRole">Current Role</Label>
+                        <Input id="currentRole" defaultValue="Senior Software Engineer" />
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="company">Company</Label>
+                        <Input id="company" defaultValue="TechCorp Inc." />
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="industry">Industry</Label>
+                        <Input id="industry" defaultValue="Information Technology" />
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="skills">Skills (comma separated)</Label>
+                        <Input id="skills" defaultValue="React, Node.js, AWS, Java, TypeScript, Project Management" />
+                      </div>
+                      
+                      <Button>Save Professional Information</Button>
                     </CardContent>
                   </Card>
                   
@@ -533,61 +304,68 @@ const Profile = () => {
                     <CardContent className="space-y-6">
                       <div>
                         <Label htmlFor="linkedin">LinkedIn</Label>
-                        <Input
-                          id="linkedin"
-                          value={profileInfo.linkedin}
-                          onChange={(e) =>
-                            setProfileInfo((prev) => ({ ...prev, linkedin: e.target.value }))
-                          }
-                        />
+                        <Input id="linkedin" defaultValue="linkedin.com/in/rahulkumar" />
                       </div>
                       
                       <div>
                         <Label htmlFor="twitter">Twitter</Label>
-                        <Input
-                          id="twitter"
-                          value={profileInfo.twitter}
-                          onChange={(e) =>
-                            setProfileInfo((prev) => ({ ...prev, twitter: e.target.value }))
-                          }
-                        />
+                        <Input id="twitter" defaultValue="twitter.com/rahulk" />
                       </div>
                       
                       <div>
                         <Label htmlFor="github">GitHub</Label>
-                        <Input
-                          id="github"
-                          value={profileInfo.github}
-                          onChange={(e) =>
-                            setProfileInfo((prev) => ({ ...prev, github: e.target.value }))
-                          }
-                        />
+                        <Input id="github" defaultValue="github.com/rahulkumar" />
                       </div>
                       
                       <div>
                         <Label htmlFor="website">Personal Website</Label>
-                        <Input
-                          id="website"
-                          value={profileInfo.website}
-                          onChange={(e) =>
-                            setProfileInfo((prev) => ({ ...prev, website: e.target.value }))
-                          }
-                        />
+                        <Input id="website" defaultValue="www.rahulkumar.dev" />
                       </div>
+                      
+                      <Button>Save Social Profiles</Button>
                     </CardContent>
-                    <Button
-                      onClick={() =>
-                        setProfileInfo((prev) => ({
-                          ...prev,
-                          linkedin: document.getElementById("linkedin").value,
-                          twitter: document.getElementById("twitter").value,
-                          github: document.getElementById("github").value,
-                          website: document.getElementById("website").value,
-                        }))
-                      }
-                    >
-                      Save Social Profiles
-                    </Button>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Privacy Settings</CardTitle>
+                      <CardDescription>Control your profile visibility</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium">Public Profile</p>
+                          <p className="text-sm text-muted-foreground">Allow anyone to view your profile</p>
+                        </div>
+                        <Switch defaultChecked />
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium">Show Email Address</p>
+                          <p className="text-sm text-muted-foreground">Display your email to other alumni</p>
+                        </div>
+                        <Switch defaultChecked />
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium">Show Phone Number</p>
+                          <p className="text-sm text-muted-foreground">Display your phone to other alumni</p>
+                        </div>
+                        <Switch />
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium">Email Notifications</p>
+                          <p className="text-sm text-muted-foreground">Receive email updates</p>
+                        </div>
+                        <Switch defaultChecked />
+                      </div>
+                      
+                      <Button variant="outline">Save Privacy Settings</Button>
+                    </CardContent>
                   </Card>
                 </div>
               </TabsContent>
@@ -759,22 +537,9 @@ const Profile = () => {
                         <div className="border border-dashed border-input rounded-md p-6 text-center">
                           <FileText className="h-10 w-10 mx-auto mb-4 text-muted-foreground" />
                           <p className="text-sm text-muted-foreground mb-2">
-                            {resume ? `Uploaded: ${resume.name}` : "Drag and drop your resume here, or click to browse"}
+                            Drag and drop your resume here, or click to browse
                           </p>
-                          <input
-                            type="file"
-                            accept=".pdf,.doc,.docx"
-                            onChange={(e) => setResume(e.target.files[0])}
-                            ref={resumeInputRef} // Attach ref to input
-                            className="hidden"
-                          />
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => resumeInputRef.current && resumeInputRef.current.click()} // Trigger input click
-                          >
-                            Browse Files
-                          </Button>
+                          <Button variant="outline" size="sm">Browse Files</Button>
                         </div>
                       </div>
                       

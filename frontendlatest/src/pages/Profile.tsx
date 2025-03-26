@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -73,7 +74,7 @@ const Profile = () => {
                     {/* About Card */}
                     <ProfileCard title="About">
                       <p className="text-muted-foreground">
-                        Senior Software Engineer with 9 years of experience specializing in full-stack development and cloud architecture. Passionate about mentoring and building scalable applications.
+                        Senior Software Engineer with 8 years of experience specializing in full-stack development and cloud architecture. Passionate about mentoring and building scalable applications.
                       </p>
                       
                       <div className="mt-6 space-y-3">
@@ -195,7 +196,7 @@ const Profile = () => {
                       
                       <div>
                         <Label htmlFor="about">About Me</Label>
-                        <Textarea id="about" rows={4} defaultValue="Senior Software Engineer with 9 years of experience specializing in full-stack development and cloud architecture. Passionate about mentoring and building scalable applications." />
+                        <Textarea id="about" rows={4} defaultValue="Senior Software Engineer with 8 years of experience specializing in full-stack development and cloud architecture. Passionate about mentoring and building scalable applications." />
                       </div>
                       
                       <Button>Save Personal Information</Button>

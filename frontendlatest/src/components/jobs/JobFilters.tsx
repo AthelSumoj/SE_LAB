@@ -1,21 +1,14 @@
-import React, { useState } from "react";
+
+import React from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
 
 interface JobFiltersProps {
-  onFilterChange: (filters: { type: string; location: string; industry: string }) => void;
+  onFilterChange: (type: string, value: string) => void;
 }
 
 const JobFilters = ({ onFilterChange }: JobFiltersProps) => {
-  const [filters, setFilters] = useState({ type: "all", location: "all", industry: "all" });
-
-  const handleFilterChange = (key: string, value: string) => {
-    const updatedFilters = { ...filters, [key]: value };
-    setFilters(updatedFilters);
-    onFilterChange(updatedFilters); // Pass the entire filter object
-  };
-
   return (
     <div className="bg-muted p-4 rounded-lg mb-8">
       <div className="flex items-center gap-2 mb-4">
@@ -25,7 +18,7 @@ const JobFilters = ({ onFilterChange }: JobFiltersProps) => {
       
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <div>
-          <Select value={filters.type} onValueChange={(value) => handleFilterChange('type', value)}>
+          <Select onValueChange={(value) => onFilterChange('type', value)}>
             <SelectTrigger>
               <SelectValue placeholder="Opportunity Type" />
             </SelectTrigger>
@@ -40,7 +33,7 @@ const JobFilters = ({ onFilterChange }: JobFiltersProps) => {
         </div>
         
         <div>
-          <Select value={filters.location} onValueChange={(value) => handleFilterChange('location', value)}>
+          <Select onValueChange={(value) => onFilterChange('location', value)}>
             <SelectTrigger>
               <SelectValue placeholder="Location" />
             </SelectTrigger>
@@ -55,7 +48,7 @@ const JobFilters = ({ onFilterChange }: JobFiltersProps) => {
         </div>
         
         <div>
-          <Select value={filters.industry} onValueChange={(value) => handleFilterChange('industry', value)}>
+          <Select onValueChange={(value) => onFilterChange('industry', value)}>
             <SelectTrigger>
               <SelectValue placeholder="Industry" />
             </SelectTrigger>

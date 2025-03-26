@@ -31,7 +31,7 @@ export default function Hero() {
           
           <div className="flex flex-col sm:flex-row gap-4 animate-slide-up" style={{animationDelay: "0.2s"}}>
             <Button asChild size="lg" className="w-full sm:w-auto">
-              <Link to="/login?tab=registeryy">Join the Community</Link>
+              <Link to="/login?tab=register">Join the Community</Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
               <Link to="/login" className="flex items-center gap-2">

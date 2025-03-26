@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -6,59 +7,19 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Upload, Image as ImageIcon, Users, Filter, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 
 const Gallery = () => {
   const [activeTab, setActiveTab] = useState("all");
-  const [galleryItemsState, setGalleryItemsState] = useState<GalleryItemProps[]>(galleryItems);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newPhoto, setNewPhoto] = useState({
-    imageUrl: "",
-    title: "",
-    category: "event",
-    batchYear: "",
-  });
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filterCategory, setFilterCategory] = useState("all");
-  const [filterBatchYear, setFilterBatchYear] = useState("");
-  const [visibleItemsCount, setVisibleItemsCount] = useState(8); // Initial number of visible items
-
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  const filteredGalleryItems = galleryItemsState.filter((item) => {
-    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = filterCategory === "all" || item.category === filterCategory;
-    const matchesBatchYear = !filterBatchYear || item.batchYear === filterBatchYear;
-    return matchesSearch && matchesCategory && matchesBatchYear;
-  });
-
-  const handleLoadMore = () => {
-    setVisibleItemsCount((prevCount) => prevCount + 8); // Load 8 more items
-  };
-
-  const handleUpload = () => {
-    if (!newPhoto.title || !newPhoto.imageUrl) {
-      alert("Please provide a title and upload an image.");
-      return;
-    }
-    const photoToAdd: GalleryItemProps = {
-      ...newPhoto,
-      date: new Date().toLocaleDateString(),
-      batchYear: newPhoto.batchYear || undefined,
-    };
-    setGalleryItemsState((prevItems) => [photoToAdd, ...prevItems]);
-    setIsModalOpen(false);
-    setNewPhoto({ imageUrl: "", title: "", category: "event", batchYear: "" });
-  };
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-grow pt-24 pb-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto px-4">
           {/* Header */}
           <div className="mb-12">
             <Badge variant="outline" className="mb-4">Gallery</Badge>
@@ -69,113 +30,22 @@ const Gallery = () => {
             </p>
           </div>
           
-          {/* Search and Filters */}
-          <div className="mb-8 flex flex-col md:flex-row gap-4 justify-between items-center">
-            <div className="relative w-full md:w-auto">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                className="pl-10 w-full md:w-[300px]"
-                placeholder="Search photos..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            <Select
-              value={filterCategory}
-              onValueChange={(value) => setFilterCategory(value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Filter by Category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="batch">Batch</SelectItem>
-                <SelectItem value="event">Event</SelectItem>
-                <SelectItem value="campus">Campus</SelectItem>
-                <SelectItem value="reunion">Reunion</SelectItem>
-              </SelectContent>
-            </Select>
-            <Input
-              placeholder="Filter by Batch Year"
-              value={filterBatchYear}
-              onChange={(e) => setFilterBatchYear(e.target.value)}
-              className="w-full md:w-[150px]"
-            />
-          </div>
-
           {/* Upload CTA */}
           <div className="mb-8 bg-secondary rounded-lg p-6 flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <h3 className="text-xl font-bold mb-2">Share Your Memories</h3>
               <p className="text-muted-foreground">Have photos from your college days or recent alumni events? Share them with the community!</p>
             </div>
-            <Button className="gap-2" onClick={() => setIsModalOpen(true)}>
+            <Button className="gap-2">
               <Upload size={16} />
               Upload Photos
             </Button>
           </div>
-
-          {/* Upload Modal */}
-          {isModalOpen && (
-            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Upload Photo</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <Input
-                    placeholder="Photo Title"
-                    value={newPhoto.title}
-                    onChange={(e) => setNewPhoto({ ...newPhoto, title: e.target.value })}
-                  />
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onload = () => setNewPhoto({ ...newPhoto, imageUrl: reader.result as string });
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                  />
-                  <Select
-                    value={newPhoto.category}
-                    onValueChange={(value) => setNewPhoto({ ...newPhoto, category: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="batch">Batch</SelectItem>
-                      <SelectItem value="event">Event</SelectItem>
-                      <SelectItem value="campus">Campus</SelectItem>
-                      <SelectItem value="reunion">Reunion</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {(newPhoto.category === "batch" || newPhoto.category === "reunion") && (
-                    <Input
-                      placeholder="Batch Year"
-                      value={newPhoto.batchYear}
-                      onChange={(e) => setNewPhoto({ ...newPhoto, batchYear: e.target.value })}
-                    />
-                  )}
-                </div>
-                <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsModalOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button onClick={handleUpload}>Upload</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          )}
           
           {/* Filters */}
           <div className="mb-8 flex flex-col md:flex-row gap-4 justify-between items-center">
-            <Tabs defaultValue="all" className="w-full" onValueChange={setActiveTab}>
-              <TabsList className="grid grid-cols-3 md:grid-cols-5 w-full">
+            <Tabs defaultValue="all" className="w-full md:w-auto" onValueChange={setActiveTab}>
+              <TabsList className="grid grid-cols-3 md:grid-cols-5 w-full md:w-auto">
                 <TabsTrigger value="all">All Photos</TabsTrigger>
                 <TabsTrigger value="batches">Batch Photos</TabsTrigger>
                 <TabsTrigger value="events">Events</TabsTrigger>
@@ -186,7 +56,7 @@ const Gallery = () => {
               {/* Gallery Grid */}
               <TabsContent value="all" className="mt-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {filteredGalleryItems.slice(0, visibleItemsCount).map((item, index) => (
+                  {galleryItems.map((item, index) => (
                     <GalleryItem key={index} {...item} />
                   ))}
                 </div>
@@ -194,58 +64,54 @@ const Gallery = () => {
               
               <TabsContent value="batches" className="mt-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {filteredGalleryItems
-                    .filter(item => item.category === "batch")
-                    .slice(0, visibleItemsCount)
-                    .map((item, index) => (
-                      <GalleryItem key={index} {...item} />
-                    ))}
+                  {galleryItems.filter(item => item.category === "batch").map((item, index) => (
+                    <GalleryItem key={index} {...item} />
+                  ))}
                 </div>
               </TabsContent>
               
               <TabsContent value="events" className="mt-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {filteredGalleryItems
-                    .filter(item => item.category === "event")
-                    .slice(0, visibleItemsCount)
-                    .map((item, index) => (
-                      <GalleryItem key={index} {...item} />
-                    ))}
+                  {galleryItems.filter(item => item.category === "event").map((item, index) => (
+                    <GalleryItem key={index} {...item} />
+                  ))}
                 </div>
               </TabsContent>
               
               <TabsContent value="campus" className="mt-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {filteredGalleryItems
-                    .filter(item => item.category === "campus")
-                    .slice(0, visibleItemsCount)
-                    .map((item, index) => (
-                      <GalleryItem key={index} {...item} />
-                    ))}
+                  {galleryItems.filter(item => item.category === "campus").map((item, index) => (
+                    <GalleryItem key={index} {...item} />
+                  ))}
                 </div>
               </TabsContent>
               
               <TabsContent value="reunions" className="mt-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {filteredGalleryItems
-                    .filter(item => item.category === "reunion")
-                    .slice(0, visibleItemsCount)
-                    .map((item, index) => (
-                      <GalleryItem key={index} {...item} />
-                    ))}
+                  {galleryItems.filter(item => item.category === "reunion").map((item, index) => (
+                    <GalleryItem key={index} {...item} />
+                  ))}
                 </div>
               </TabsContent>
             </Tabs>
+            
+            <div className="flex gap-2 w-full md:w-auto">
+              <div className="relative w-full md:w-auto">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input className="pl-10 w-full md:w-[200px]" placeholder="Search photos..." />
+              </div>
+              <Button variant="outline" size="icon">
+                <Filter size={16} />
+              </Button>
+            </div>
           </div>
           
           {/* Load More */}
-          {visibleItemsCount < filteredGalleryItems.length && (
-            <div className="flex justify-center mb-12">
-              <Button variant="outline" className="gap-2" onClick={handleLoadMore}>
-                Load More Photos
-              </Button>
-            </div>
-          )}
+          <div className="flex justify-center mb-12">
+            <Button variant="outline" className="gap-2">
+              Load More Photos
+            </Button>
+          </div>
         </div>
       </main>
       <Footer />
